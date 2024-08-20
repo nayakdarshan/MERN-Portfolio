@@ -1,0 +1,22 @@
+.admin-header, .admin-footer {
+    background: #001529;
+    color: #fff;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .admin-logo {
+    height: 31px;
+    background: rgba(255, 255, 255, 0.2);
+    margin-right: 16px;
+  }
+  
+  .admin-header-content h1 {
+    color: #fff;
+    margin: 0;
+  }
+  .admin-footer{
+    height:50px;
+  }

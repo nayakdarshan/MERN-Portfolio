@@ -9,6 +9,7 @@ app.use("/api/v1/portfolio",portfolioRoute);
 
 const port = process.env.PORT || 5000;
 
+const cors = require('cors');
 app.use(cors(
     {
         origin:["https://darshannayak-api.vercel.app/"],

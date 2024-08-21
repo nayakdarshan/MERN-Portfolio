@@ -9,6 +9,14 @@ app.use("/api/v1/portfolio",portfolioRoute);
 
 const port = process.env.PORT || 5000;
 
+// app.use(cors(
+//     {
+//         origin:[]
+//     }
+// ))
+app.get('/',(req,res)=>{
+    res.send('SERVER RUNNING')
+})
 // const path = require('path');
 // if(process.env.NODE_ENV==='production'){
 //     app.use(express.static('client/build'));

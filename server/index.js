@@ -9,13 +9,15 @@ app.use("/api/v1/portfolio",portfolioRoute);
 
 const port = process.env.PORT || 5000;
 
-// app.use(cors(
-//     {
-//         origin:[]
-//     }
-// ))
+app.use(cors(
+    {
+        origin:["https://darshannayak-api.vercel.app/"],
+        methods:['GET','POST','PUT','DELETE'],
+        credentials:true,
+    }
+))
 app.get('/',(req,res)=>{
-    res.send('SERVER RUNNING')
+    res.json('SERVER RUNNING')
 })
 // const path = require('path');
 // if(process.env.NODE_ENV==='production'){

@@ -12,6 +12,16 @@ mongoose.connect(process.env.MONGO_URL, { // Ensure MONGO_URL is set in Vercel's
 });
 
 const connection = mongoose.connection;
+app.get('/', (req, res) => {
+    res.send('Server is running');
+});
+
+// Add other route definitions here
+
+// Catch-all route for undefined routes
+app.use((req, res, next) => {
+    res.status(404).send('NOT FOUND');
+});
 
 connection.on('error', () => {
     console.log('ERROR CONNECTING DB');

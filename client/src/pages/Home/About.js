@@ -18,7 +18,7 @@ function About() {
             <div className="fs-24 fw-800 text-center mb-5">
               Hi, I’m Darshan Nayak. Nice to meet you.
             </div>
-            <div className="fs-20 fw-500 text-center w-75">
+            <div className="fs-20 fw-500 text-center">
               As a Computer Science Engineer with expertise as an Angular
               Developer, I have honed my skills in creating dynamic and engaging
               web applications utilizing the Angular framework. My proficiency

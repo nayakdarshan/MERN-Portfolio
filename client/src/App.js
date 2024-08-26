@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Admin from './pages/Admin';
 import Loader from './components/Loader/Loader';
 import Login from './pages/Admin/Login';
+import Contact from './pages/Contact/Contact';
 function App() {
   const {loading,portfolioData} = useSelector(state=>state.root);
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ function App() {
       ) : (
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/contact" element={<Contact isContact = {true} />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin-login" element={<Login />} />
 

@@ -1,15 +1,24 @@
 import React from 'react'
-
-function HeaderComponent() {
+import logoSrc from '/home/nayakdarshan/Documents/MERN-Portfolio/client/src/assets/purple-logo.png';
+import closeSrc from '/home/nayakdarshan/Documents/MERN-Portfolio/client/src/assets/close.svg'
+const HeaderComponent = ({isContact}) => {
   return (
     <div className='container-fluid'>
         <div className='d-flex align-items-center justify-content-between header h-10vh'>
             <div className="logo">
-                logo
+            <img src={logoSrc} alt="logo" className="portfolio-logo" />
             </div>
-            <div className="">
+            {!isContact && (
+              <div className="">
                 <button className='primary-button'>Say Hello</button>
-            </div>
+              </div>
+            )}
+            {isContact && (
+              <div className="close-icon-container">
+                <img src={closeSrc} alt="close" className="close-icon" />
+              </div>
+            )}
+            
         </div>
     </div>
   )

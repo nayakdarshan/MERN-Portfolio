@@ -31,7 +31,9 @@ if (process.env.NODE_ENV === 'production') {
         res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
     });
 }
-
+app.get('/', (req, res) => {
+    res.send('Welcome to the backend!');
+  });
 // Routes setup
 const portfolioRoute = require('./routes/portfolioRoute');
 app.use("/api/v1/portfolio", portfolioRoute);

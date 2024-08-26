@@ -3,9 +3,9 @@ const cors = require('cors');
 const app = express();
 
 // Use dotenv only in development (Vercel uses its own environment variable management)
-if (process.env.NODE_ENV !== 'production') {
+// if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config(); // Load .env file in development
-}
+// }
 
 const dbconfig = require('./config/dbConfig'); // Ensure MongoDB connection is established
 

@@ -1,7 +1,13 @@
-import React from 'react'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import logoSrc from '../../assets/purple-logo.png';
 import closeSrc from '../../assets/close.svg';
 const HeaderComponent = ({isContact}) => {
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    navigate('/contact');
+  };
   return (
     <div className='container-fluid'>
         <div className='d-flex align-items-center justify-content-between header h-10vh'>
@@ -10,7 +16,7 @@ const HeaderComponent = ({isContact}) => {
             </div>
             {!isContact && (
               <div className="">
-                <button className='primary-button'>Say Hello</button>
+                <button className='primary-button' onClick={handleButtonClick}>Say Hello</button>
               </div>
             )}
             {isContact && (

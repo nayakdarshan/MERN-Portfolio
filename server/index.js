@@ -1,44 +1,26 @@
 const express = require('express');
-const cors = require('cors');
-const path = require('path');
 const mongoose = require('mongoose');
+const cors = require('cors');
 require('dotenv').config();
 
-// Initialize Express app
 const app = express();
+const port = process.env.PORT || 5000;
 
-// CORS setup
-app.use(cors({
-    origin: ["http://localhost:3000", "https://darshannayak-portfolio-api.vercel.app"], // Adjusted URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-}));
-
-// Body parser middleware
+// Middleware
+app.use(cors());
 app.use(express.json());
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URL)
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.log(err));
 
-// Serve static files from the React app
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, 'client', 'build')));
-
-    // Handle React routing, return all requests to React app
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
-    });
-}
-app.get('/', (req, res) => {
+  app.get('/', (req, res) => {
     res.send('Welcome to the backend!');
   });
-// Routes setup
-const portfolioRoute = require('./routes/portfolioRoute');
-app.use("/api/v1/portfolio", portfolioRoute);
+// Define Routes
+app.use('/api/v1', require('./routes/portfolioRoute'));
 
-const port = process.env.PORT || 5000;
 app.listen(port, () => {
-    console.log(`SERVER RUNNING ON PORT ${port}`);
+  console.log(`Server running on port ${port}`);
 });

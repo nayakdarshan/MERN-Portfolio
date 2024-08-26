@@ -11,7 +11,7 @@ const dbconfig = require('./config/dbConfig'); // Ensure MongoDB connection is e
 
 // CORS setup
 app.use(cors({
-    origin: ["http://localhost:3000", "https://darshannayak-api.vercel.app"], // Local and deployed origins
+    origin: ["http://localhost:3000","https://darshannayak-portfolio-api.vercel.app/"], // Local and deployed origins
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));

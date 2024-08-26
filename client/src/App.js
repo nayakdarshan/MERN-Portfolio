@@ -14,7 +14,8 @@ function App() {
   const dispatch = useDispatch();
   const getPortFolioData = async() => {
     try{
-      const response = await axios.get('/api/v1/portfolio/get-portfolio-data');
+      const apiUrl = process.env.REACT_APP_API_URL;
+      const response = await axios.get(`${apiUrl}/get-portfolio-data`);
       dispatch(SetPortFolioData(response.data));
     }catch(error){
       console.log(error);

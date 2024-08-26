@@ -1,6 +1,6 @@
 import React from 'react'
-import logoSrc from '/home/nayakdarshan/Documents/MERN-Portfolio/client/src/assets/purple-logo.png';
-import closeSrc from '/home/nayakdarshan/Documents/MERN-Portfolio/client/src/assets/close.svg'
+import logoSrc from '../../assets/purple-logo.png';
+import closeSrc from '../../assets/close.svg';
 const HeaderComponent = ({isContact}) => {
   return (
     <div className='container-fluid'>

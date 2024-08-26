@@ -1,17 +1,21 @@
 const mongoose = require('mongoose');
+const express = require('express'); // Import Express
+
+const app = express(); // Initialize Express app
 
 // Use dotenv only in development (Vercel uses its own environment variable management)
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.MONGO_URL !== 'production') {
     require('dotenv').config(); // Load .env file in development
 }
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URL, { // Ensure MONGO_URL is set in Vercel's environment settings
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+mongoose.connect(process.env.MONGO_URL)
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
 const connection = mongoose.connection;
+
+// Define routes
 app.get('/', (req, res) => {
     res.send('Server is running');
 });
@@ -23,12 +27,5 @@ app.use((req, res, next) => {
     res.status(404).send('NOT FOUND');
 });
 
-connection.on('error', () => {
-    console.log('ERROR CONNECTING DB');
-});
-
-connection.on('connected', () => {
-    console.log('CONNECTED DB');
-});
-
-module.exports = connection;
+// Export the app and connection
+module.exports = { app, connection };

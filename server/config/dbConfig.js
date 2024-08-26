@@ -1,12 +1,17 @@
+const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
-const express = require('express'); // Import Express
+require('dotenv').config();
 
-const app = express(); // Initialize Express app
+const app = express();
 
-// Use dotenv only in development (Vercel uses its own environment variable management)
-if (process.env.MONGO_URL !== 'production') {
-    require('dotenv').config(); // Load .env file in development
-}
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URL)
@@ -15,17 +20,12 @@ mongoose.connect(process.env.MONGO_URL)
 
 const connection = mongoose.connection;
 
-// Define routes
-app.get('/', (req, res) => {
-    res.send('Server is running');
+connection.on('error', () => {
+    console.log('ERROR CONNECTING DB');
 });
 
-// Add other route definitions here
-
-// Catch-all route for undefined routes
-app.use((req, res, next) => {
-    res.status(404).send('NOT FOUND');
+connection.on('connected', () => {
+    console.log('CONNECTED DB');
 });
 
-// Export the app and connection
 module.exports = { app, connection };

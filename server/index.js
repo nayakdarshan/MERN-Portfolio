@@ -7,29 +7,13 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-const corsOptions = {
-  origin: (origin, callback) => {
-    const whitelist = ['http://localhost:3000', 'http://www.darshannayak.in', 'https://darshannayak.in', 'http://staging.darshannayak.in'];
-    if (whitelist.indexOf(origin) !== -1 || !origin) { 
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://www.darshannayak.in','http://staging.darshannayak.in'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
-  optionsSuccessStatus: 200, 
-};
-
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
-app.options('*', cors(corsOptions), (req, res) => {
-  console.log('Handling preflight request');
-  res.sendStatus(200);
-})
+}));
 app.use(express.json());
+app.options('*', cors());
 
 
 // Connect to MongoDB

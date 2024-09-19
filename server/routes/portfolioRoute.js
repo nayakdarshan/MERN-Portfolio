@@ -83,20 +83,50 @@ router.post('/update-about', async(req,res)=>{
     }
 })
 
-// Update Skills API
-router.post('/update-skills', async (req, res) => {
+// Add Skill API
+router.post('/add-skill', async (req, res) => {
     try {
-      const portfolio = await Portfolio.findOne();
-      if (portfolio) {
-        portfolio.skills = req.body.skills;
-        await portfolio.save();
-      } else {
-        await Portfolio.create({ skills: req.body.skills });
-      }
+      const newSkill = new Skill(req.body);
+      await newSkill.save();
+      const skills = await Skill.find();
       res.status(200).send({
         success: true,
-        message: 'Skills updated successfully',
-        data: portfolio ? portfolio.skills : req.body.skills,
+        message: "Skill added successfully",
+        data: skills,
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  });
+  
+  // Update Skill API
+  router.post('/update-skill', async (req, res) => {
+    try {
+      const updatedSkill = await Skill.findByIdAndUpdate(
+        { _id: req.body._id },
+        req.body,
+        { new: true },
+      );
+      const skills = await Skill.find();
+      res.status(200).send({
+        success: true,
+        message: "Skill updated successfully",
+        data: skills,
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  });
+  
+  // Delete Skill API
+  router.post('/delete-skill', async (req, res) => {
+    try {
+      await Skill.findByIdAndDelete(req.body._id);
+      const skills = await Skill.find();
+      res.status(200).send({
+        success: true,
+        message: "Skill deleted successfully",
+        data: skills,
       });
     } catch (error) {
       res.status(500).send(error);

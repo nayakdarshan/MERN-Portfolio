@@ -92,8 +92,15 @@
 
 
 
-
-
+  .skill-card {
+    margin-bottom: 20px;
+  }
+  
+  .card-img-top {
+    height: 150px;
+    object-fit: cover;
+  }
+  
 
   
   .header{

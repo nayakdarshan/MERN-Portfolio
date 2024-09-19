@@ -4,6 +4,7 @@ import AdminIntro from './AdminIntro';
 import { useSelector } from 'react-redux';
 import AdminAbout from './AdminAbout';
 import AdminSkills from './AdminSkills';
+import AdminEducation from './AdminEducation';
 
 const { Header, Content, Footer } = Layout;
 const { useBreakpoint } = Grid;
@@ -23,6 +24,11 @@ const items = [
     key: '3',
     label: 'Skills Section',
     children: <AdminSkills />,
+  },
+  {
+    key: '4',
+    label: 'Education Section',
+    children: <AdminEducation />,
   },
 ];
 

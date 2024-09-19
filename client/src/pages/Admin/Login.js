@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { HideLoading, ShowLoading } from '../../redux/rootSlice';
 import { useDispatch } from 'react-redux';
-
+import apiUrl from '../../config';
 function Login() {
   const [user, setUser] = useState({
     username: '',
@@ -20,9 +20,8 @@ function Login() {
   const dispatch = useDispatch();
   const login = async () => {
     try {
-        const apiUrl = process.env.REACT_APP_API_URL || 'https://api.darshannayak.in/api/v1';
         dispatch(ShowLoading());
-        const response = await axios.post(`${apiUrl}/portfolio/admin-login`, user);
+        const response = await axios.post(`${apiUrl}/admin-login`, user);
         dispatch(HideLoading());
         if(response.data.success){
             message.success(response.data.message);

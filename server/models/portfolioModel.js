@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { default: Skill } = require('../../client/src/pages/Home/Skill');
 
 const introSchema = new mongoose.Schema({
     welcomeText:{
@@ -37,7 +38,26 @@ const aboutSchema = new mongoose.Schema({
         required:true,
     },
 });
+
+const skillSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    image: {
+        type: String,
+        required: true,
+    },
+    level: {
+        type: Number,
+        required: true,
+        min: 0,
+        max: 100,
+    },
+});
+
 module.exports = {
     Intro:mongoose.model('intros',introSchema),
     About:mongoose.model('abouts',aboutSchema),
+    Skill:mongoose.model('skills',skillSchema),
 }

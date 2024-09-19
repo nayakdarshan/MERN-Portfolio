@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {Intro,About} = require('../models/portfolioModel');
+const {Intro,About, Skill} = require('../models/portfolioModel');
 const {Users} = require('../models/userModel');
 
 //get All Portfolio data
@@ -7,10 +7,13 @@ router.get('/get-portfolio-data', async(req,res)=>{
     try{
         const intros = await Intro.find();
         const abouts = await About.find();
+        const skills = await Skill.find();
+
         console.log(abouts)
         res.status(200).send({
             intro:intros[0],
             about:abouts[0],
+            skills:skills[0],
         })
     }catch(error){
         res.status(500).send(error);
@@ -79,4 +82,24 @@ router.post('/update-about', async(req,res)=>{
         res.status(500).send(error);
     }
 })
+
+// Update Skills API
+router.post('/update-skills', async (req, res) => {
+    try {
+      const portfolio = await Portfolio.findOne();
+      if (portfolio) {
+        portfolio.skills = req.body.skills;
+        await portfolio.save();
+      } else {
+        await Portfolio.create({ skills: req.body.skills });
+      }
+      res.status(200).send({
+        success: true,
+        message: 'Skills updated successfully',
+        data: portfolio ? portfolio.skills : req.body.skills,
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  });
 module.exports = router;

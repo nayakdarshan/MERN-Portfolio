@@ -20,7 +20,7 @@ function Login() {
   const dispatch = useDispatch();
   const login = async () => {
     try {
-        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/v1';
+        const apiUrl = process.env.REACT_APP_API_URL || 'http://api.darshannayak.in/api/v1';
         dispatch(ShowLoading());
         const response = await axios.post(`${apiUrl}/portfolio/admin-login`, user);
         dispatch(HideLoading());

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {Intro,About, Skill} = require('../models/portfolioModel');
+const {Intro,About, Skill,Education} = require('../models/portfolioModel');
 const {Users} = require('../models/userModel');
 
 //get All Portfolio data
@@ -8,12 +8,14 @@ router.get('/get-portfolio-data', async(req,res)=>{
         const intros = await Intro.find();
         const abouts = await About.find();
         const skills = await Skill.find();
+        const educations = await Education.find();
 
         console.log(abouts)
         res.status(200).send({
             intro:intros[0],
             about:abouts[0],
             skills:skills,
+            education:educations,
         })
     }catch(error){
         res.status(500).send(error);
@@ -132,4 +134,50 @@ router.post('/add-skill', async (req, res) => {
       res.status(500).send(error);
     }
   });
+
+  // Add Education API
+router.post('/add-education', async (req, res) => {
+    try {
+        const newEducation = new Education(req.body);
+        await newEducation.save();
+        const educationList = await Education.find();
+        res.status(200).send({
+            success: true,
+            message: 'Education added successfully',
+            data: educationList,
+        });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+// Update Education API
+router.post('/update-education', async (req, res) => {
+    try {
+        const education = await Education.findByIdAndUpdate(req.body._id, req.body, { new: true });
+        const educationList = await Education.find();
+        res.status(200).send({
+            success: true,
+            message: 'Education updated successfully',
+            data: educationList,
+        });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+// Delete Education API
+router.post('/delete-education', async (req, res) => {
+    try {
+        await Education.findByIdAndDelete(req.body._id);
+        const educationList = await Education.find();
+        res.status(200).send({
+            success: true,
+            message: 'Education deleted successfully',
+            data: educationList,
+        });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
 module.exports = router;

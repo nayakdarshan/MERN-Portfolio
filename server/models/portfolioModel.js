@@ -56,8 +56,39 @@ const skillSchema = new mongoose.Schema({
     },
 });
 
+const educationSchema = new mongoose.Schema({
+    instituteName: {
+        type: String,
+        required: true,
+    },
+    fromDate: {
+        type: String,
+        required: true,
+    },
+    toDate: {
+        type: String,
+        required: true,
+    },
+    current: {
+        type: Boolean,
+        default: false,
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    grade: {
+        type: String,
+        required: true,
+    },
+    location: {
+        type: String,
+        required: true,
+    },
+});
 module.exports = {
     Intro:mongoose.model('intros',introSchema),
     About:mongoose.model('abouts',aboutSchema),
     Skill:mongoose.model('skills',skillSchema),
+    Education: mongoose.model('educations', educationSchema),
 }

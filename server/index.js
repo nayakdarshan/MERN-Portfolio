@@ -8,7 +8,7 @@ const port = process.env.PORT || 5000;
 
 // Middleware
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://www.darshannayak.in', 'https://darshannayak.in', 'http://staging.darshannayak.in'],
+  origin: ['localhost:3000', 'http://www.darshannayak.in', 'https://darshannayak.in', 'http://staging.darshannayak.in'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
   credentials: true,

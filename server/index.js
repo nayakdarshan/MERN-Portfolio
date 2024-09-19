@@ -7,13 +7,19 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors({
-  origin: ['http://localhost:3000', 'http://www.darshannayak.in','http://staging.darshannayak.in'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+const corsOptions = {
+  origin: ['http://localhost:3000', 'http://www.darshannayak.in', 'https://darshannayak.in', 'http://staging.darshannayak.in'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
-}));
+};
+
+app.use(cors(corsOptions));
+
+app.options('*', cors(corsOptions));
+app.options('/api/v1/*', cors(corsOptions));
+
 app.use(express.json());
-app.options('*', cors());
 
 
 // Connect to MongoDB

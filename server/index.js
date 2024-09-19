@@ -8,11 +8,20 @@ const port = process.env.PORT || 5000;
 
 // Middleware
 const corsOptions = {
-  origin: ['localhost:3000', 'http://www.darshannayak.in', 'https://darshannayak.in', 'http://staging.darshannayak.in'],
+  origin: (origin, callback) => {
+    const whitelist = ['http://localhost:3000', 'http://www.darshannayak.in', 'https://darshannayak.in', 'http://staging.darshannayak.in'];
+    if (whitelist.indexOf(origin) !== -1 || !origin) { 
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
   credentials: true,
+  optionsSuccessStatus: 200, 
 };
+
 
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));

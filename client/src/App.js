@@ -14,7 +14,7 @@ function App() {
   const dispatch = useDispatch();
   const getPortFolioData = async() => {
     try{
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://api.darshannayak.in/api/v1';
+      const apiUrl = process.env.REACT_APP_API_URL || 'https://api.darshannayak.in/api/v1';
       const response = await axios.get(`${apiUrl}/get-portfolio-data`);
       dispatch(SetPortFolioData(response.data));
     }catch(error){

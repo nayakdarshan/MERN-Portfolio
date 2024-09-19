@@ -13,7 +13,7 @@ router.get('/get-portfolio-data', async(req,res)=>{
         res.status(200).send({
             intro:intros[0],
             about:abouts[0],
-            skills:skills[0],
+            skills:skills,
         })
     }catch(error){
         res.status(500).send(error);

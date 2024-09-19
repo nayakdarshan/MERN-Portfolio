@@ -38,14 +38,14 @@ function About() {
           </div>
         </div>
       </div>
-      <div className="skills-section container">
+      {/* <div className="skills-section container">
         <div className="skills-card">
           <div className="fs-24 fw-800 text-center mb-3">Technical Skills</div>
           {skills.map((skill) => (
             <Skill key={skill.name} name={skill.name} percentage={skill.percentage} />
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

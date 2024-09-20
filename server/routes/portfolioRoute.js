@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const {Intro,About, Skill,Education, Profile} = require('../models/portfolioModel');
 const {Users} = require('../models/userModel');
-
+const upload = require('../middleware/upload');
 //get All Portfolio data
 router.get('/get-portfolio-data', async(req,res)=>{
     try{
@@ -182,4 +182,53 @@ router.post('/delete-education', async (req, res) => {
         res.status(500).send(error);
     }
 });
+
+// UPDATE PROFILE API
+router.post('/update-profile', upload.single('profileImg'), async (req, res) => {
+    try {
+      const { firstName, lastName, dob, location, _id } = req.body;
+      let profileImg;
+  
+      // If a new image is uploaded, set the profileImg path
+      if (req.file) {
+        profileImg = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+      }
+  
+      // Find the profile by _id
+      const profile = await Profile.findById(_id);
+      if (!profile) {
+        return res.status(404).send({
+          success: false,
+          message: 'Profile not found',
+        });
+      }
+  
+      // Update fields
+      profile.firstName = firstName;
+      profile.lastName = lastName;
+      profile.dob = dob;
+      profile.location = location;
+      if (profileImg) {
+        profile.profileImg = profileImg;
+      }
+  
+      await profile.save();
+  
+      res.status(200).send({
+        success: true,
+        message: 'Profile updated successfully',
+        data: profile,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({
+        success: false,
+        message: error.message,
+      });
+    }
+  });
+  
+  // Serve static files from the uploads directory
+  router.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+  
 module.exports = router;

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const { default: Skill } = require('../../client/src/pages/Home/Skill');
 
-const introSchema = new mongoose.Schema({
-    welcomeText:{
+const profileSchema = new mongoose.Schema({
+    profileImg:{
         type:String,
         required:true,
     },
@@ -11,6 +11,20 @@ const introSchema = new mongoose.Schema({
         required:true,
     },
     lastName:{
+        type:String,
+        required:true,
+    },
+    dob:{
+        type:String,
+        required:true,
+    },
+    location:{
+        type:String,
+        required:true,
+    }
+});
+const introSchema = new mongoose.Schema({
+    welcomeText:{
         type:String,
         required:true,
     },
@@ -87,6 +101,7 @@ const educationSchema = new mongoose.Schema({
     },
 });
 module.exports = {
+    Profile:mongoose.model('profiles',profileSchema),
     Intro:mongoose.model('intros',introSchema),
     About:mongoose.model('abouts',aboutSchema),
     Skill:mongoose.model('skills',skillSchema),

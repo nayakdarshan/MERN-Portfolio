@@ -1,10 +1,11 @@
 const router = require('express').Router();
-const {Intro,About, Skill,Education} = require('../models/portfolioModel');
+const {Intro,About, Skill,Education, Profile} = require('../models/portfolioModel');
 const {Users} = require('../models/userModel');
 
 //get All Portfolio data
 router.get('/get-portfolio-data', async(req,res)=>{
     try{
+        const profiles = await Profile.find();
         const intros = await Intro.find();
         const abouts = await About.find();
         const skills = await Skill.find();
@@ -12,6 +13,7 @@ router.get('/get-portfolio-data', async(req,res)=>{
 
         console.log(abouts)
         res.status(200).send({
+            basicData:profiles[0],
             intro:intros[0],
             about:abouts[0],
             skills:skills,

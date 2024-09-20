@@ -1,7 +1,9 @@
-const router = require('express').Router();
+const express = require('express');
+const router = express.Router(); 
 const {Intro,About, Skill,Education, Profile} = require('../models/portfolioModel');
 const {Users} = require('../models/userModel');
 const upload = require('../middleware/upload');
+const path = require('path');
 //get All Portfolio data
 router.get('/get-portfolio-data', async(req,res)=>{
     try{

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import AdminAbout from './AdminAbout';
 import AdminSkills from './AdminSkills';
 import AdminEducation from './AdminEducation';
+import AdminBasicDetails from './AdminBasicDetails';
 
 const { Header, Content, Footer } = Layout;
 const { useBreakpoint } = Grid;
@@ -12,21 +13,26 @@ const { useBreakpoint } = Grid;
 const items = [
   {
     key: '1',
+    label: 'Profile Section',
+    children: <AdminBasicDetails />,
+  },
+  {
+    key: '2',
     label: 'Intro Section',
     children: <AdminIntro />,
   },
   {
-    key: '2',
+    key: '3',
     label: 'About Section',
     children: <AdminAbout />,
   },
   {
-    key: '3',
+    key: '4',
     label: 'Skills Section',
     children: <AdminSkills />,
   },
   {
-    key: '4',
+    key: '5',
     label: 'Education Section',
     children: <AdminEducation />,
   },

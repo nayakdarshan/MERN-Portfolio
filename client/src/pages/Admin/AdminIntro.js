@@ -35,14 +35,6 @@ function AdminIntro() {
             <Input placeholder='Welcome Text' />
         </Form.Item>
 
-        <Form.Item name='firstName' label="Enter First Name">
-            <Input placeholder='First Name' />
-        </Form.Item>
-
-        <Form.Item name='lastName' label="Enter Last Name">
-            <Input placeholder='Last Name' />
-        </Form.Item>
-
         <Form.Item name='caption' label="Enter Caption">
             <Input placeholder='Caption' />
         </Form.Item>

@@ -89,7 +89,15 @@
     min-height:80vh;
   }
 
+  .guest-login-button {
+    background-color: green;
+    color: white; /* Adjust text color for contrast */
+}
 
+  .login-button {
+    width: 100%;
+    margin-top: 10px; /* Space between buttons */
+}
 
 
   .skill-card {

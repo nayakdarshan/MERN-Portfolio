@@ -185,10 +185,7 @@ router.post('/delete-education', async (req, res) => {
     }
 });
 
-// Serve static files from the 'uploads' directory (optional if not using local storage)
-router.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-
-// UPDATE PROFILE API
+//UPDATE PROFILE API
 router.post('/update-profile', upload.single('profileImg'), async (req, res) => {
   try {
     const { firstName, lastName, dob, location, _id } = req.body;
@@ -230,5 +227,5 @@ router.post('/update-profile', upload.single('profileImg'), async (req, res) => 
     });
   }
 });
-  
+
 module.exports = router;

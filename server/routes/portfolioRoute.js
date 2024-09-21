@@ -71,23 +71,24 @@ router.post('/update-intro', async(req,res)=>{
     }
 })
 
-//ABOUT update API
-router.post('/update-about', async(req,res)=>{
-    try{
-        const about = await about.findByIdAndUpdate(
-            {_id:req.body._id},
-            req.body,
-            {new:true},
-        );
-        res.status(200).send({
-            data:about,
-            success:true,
-            message:"About updated successfully"
-        })
-    }catch(error){
-        res.status(500).send(error);
+// ABOUT update API
+router.post('/update-about', async(req, res) => {
+    try {
+      const about = await About.findByIdAndUpdate(
+        { _id: req.body._id },
+        req.body,
+        { new: true },
+      );
+      res.status(200).send({
+        data: about,
+        success: true,
+        message: 'About updated successfully',
+      });
+    } catch (error) {
+      res.status(500).send(error);
     }
-})
+  });
+  
 
 // Add Skill API
 router.post('/add-skill', async (req, res) => {
@@ -185,47 +186,44 @@ router.post('/delete-education', async (req, res) => {
     }
 });
 
-//UPDATE PROFILE API
+// UPDATE PROFILE API
 router.post('/update-profile', upload.single('profileImg'), async (req, res) => {
-  try {
-    const { firstName, lastName, dob, location, _id } = req.body;
-    let profileImgUrl = req.body.profileImg; // Default to existing image
-
-    // If a new image is uploaded, use its S3 URL
-    if (req.file && req.file.location) {
-      profileImgUrl = req.file.location;
-    }
-
-    // Find the profile by _id
-    const profile = await Profile.findById(_id);
-    if (!profile) {
-      return res.status(404).send({
+    try {
+      const { firstName, lastName, dob, location, _id } = req.body;
+      let profileImgUrl = req.body.profileImg; 
+  
+      if (req.file && req.file.location) {
+        profileImgUrl = req.file.location;
+      }
+  
+      const profile = await Profile.findById(_id);
+      if (!profile) {
+        return res.status(404).send({
+          success: false,
+          message: 'Profile not found',
+        });
+      }
+  
+      profile.firstName = firstName;
+      profile.lastName = lastName;
+      profile.dob = dob;
+      profile.location = location;
+      profile.profileImg = profileImgUrl;
+  
+      await profile.save();
+  
+      res.status(200).send({
+        success: true,
+        message: 'Profile updated successfully',
+        data: profile,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({
         success: false,
-        message: 'Profile not found',
+        message: error.message,
       });
     }
-
-    // Update fields
-    profile.firstName = firstName;
-    profile.lastName = lastName;
-    profile.dob = dob;
-    profile.location = location;
-    profile.profileImg = profileImgUrl;
-
-    await profile.save();
-
-    res.status(200).send({
-      success: true,
-      message: 'Profile updated successfully',
-      data: profile,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({
-      success: false,
-      message: error.message,
-    });
-  }
-});
+  });
 
 module.exports = router;

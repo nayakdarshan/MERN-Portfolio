@@ -6,6 +6,8 @@ const upload = require('../middleware/upload');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.JWT_SECRET;
+const bcrypt = require('bcrypt');
+
 //get All Portfolio data
 router.get('/get-portfolio-data', async(req,res)=>{
     try{
@@ -31,12 +33,9 @@ router.get('/get-portfolio-data', async(req,res)=>{
 // admin login
 router.post('/admin-login', async (req, res) => {
     try {
-        const user = await Users.findOne({
-            username: req.body.username,
-            password: req.body.password 
-        });
+        const user = await Users.findOne({ username: req.body.username });
 
-        if (user) {
+        if (user && await bcrypt.compare(req.body.password, user.password)) {
             const token = jwt.sign({ id: user._id, username: user.username }, SECRET_KEY, { expiresIn: '1h' });
             return res.status(200).send({
                 success: true,
@@ -58,10 +57,10 @@ router.post('/admin-login', async (req, res) => {
     }
 });
 
+
 // Guest login
 router.post('/guest-login', async (req, res) => {
     try {
-        // Assuming guest credentials are hardcoded
         const guestUser = {
             username: 'guest',
             password: 'guest'

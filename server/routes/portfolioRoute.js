@@ -36,17 +36,17 @@ router.post('/admin-login', async (req, res) => {
         const user = await Users.findOne({ username: req.body.username });
 
         if (user && await bcrypt.compare(req.body.password, user.password)) {
-            // Set token expiration to 5 minutes
             const token = jwt.sign(
-                { id: user._id, username: user.username }, 
+                { id: user._id, username: user.username, isGuest: user.isGuest }, 
                 SECRET_KEY, 
-                { expiresIn: '5m' } // Expires in 5 minutes
+                { expiresIn: '5m' }
             );
 
             return res.status(200).send({
                 success: true,
                 message: "Login Successful",
-                token: token
+                token: token,
+                isGuest: user.isGuest
             });
         } else {
             return res.status(400).send({
@@ -64,40 +64,6 @@ router.post('/admin-login', async (req, res) => {
 });
 
 
-
-// Guest login
-router.post('/guest-login', async (req, res) => {
-    try {
-        const guestUser = {
-            username: 'guest',
-            password: 'guest'
-        };
-
-        const user = await Users.findOne({
-            username: guestUser.username,
-            password: guestUser.password
-        });
-
-        if (user) {
-            return res.status(200).send({
-                success: true,
-                data: user,
-                message: "Guest Login Successful"
-            });
-        } else {
-            return res.status(400).send({
-                success: false,
-                message: "Guest Login Failed - Invalid guest credentials"
-            });
-        }
-    } catch (error) {
-        console.error(error);
-        return res.status(500).send({
-            success: false,
-            message: "Internal Server Error"
-        });
-    }
-});
 
 //INTRO update API
 router.post('/update-intro', async(req,res)=>{

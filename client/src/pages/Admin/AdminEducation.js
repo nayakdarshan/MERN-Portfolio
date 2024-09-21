@@ -6,12 +6,11 @@ import axios from 'axios';
 import apiUrl from '../../config';
 import moment from 'moment';
 
-
 const { RangePicker } = DatePicker;
 
 function AdminEducation() {
   const dispatch = useDispatch();
-  const { portfolioData } = useSelector((state) => state.root);
+  const { portfolioData, isGuest } = useSelector((state) => state.root);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentEducation, setCurrentEducation] = useState(null);
@@ -40,6 +39,8 @@ function AdminEducation() {
   };
 
   const onFinish = async (values) => {
+    if (isGuest) return; 
+
     try {
       setLoading(true);
       dispatch(ShowLoading());
@@ -78,6 +79,11 @@ function AdminEducation() {
   };
 
   const deleteEducation = (educationId) => {
+    if (isGuest) {
+      message.error('Guest users cannot delete education entries.');
+      return;
+    }
+
     Modal.confirm({
       title: 'Are you sure you want to delete this education?',
       onOk: async () => {
@@ -113,7 +119,7 @@ function AdminEducation() {
   return (
     <div>
       <div className='d-flex justify-content-end mb-3'>
-        <Button className='btn btn-primary' onClick={() => showModal()}>
+        <Button className='btn btn-primary' onClick={() => showModal()} disabled={isGuest}>
           Add Education
         </Button>
       </div>
@@ -127,10 +133,10 @@ function AdminEducation() {
               <p>Grade: {education.grade || 'N/A'}</p>
               <p>Location: {education.location}</p>
               <div className='d-flex justify-content-between'>
-                <Button className='btn btn-primary' onClick={() => showModal(education)}>
+                <Button className='btn btn-primary' onClick={() => showModal(education)} disabled={isGuest}>
                   Update
                 </Button>
-                <Button className='btn btn-danger' onClick={() => deleteEducation(education._id)}>
+                <Button className='btn btn-danger' onClick={() => deleteEducation(education._id)} disabled={isGuest}>
                   Delete
                 </Button>
               </div>
@@ -156,50 +162,50 @@ function AdminEducation() {
               label='Institute Name'
               rules={[{ required: true, message: 'Please enter the institute name' }]}
             >
-              <Input placeholder='Enter institute name' />
+              <Input placeholder='Enter institute name' disabled={isGuest} />
             </Form.Item>
             <Form.Item
               name='fromDate'
               label='From Date'
               rules={[{ required: true, message: 'Please select the start date' }]}
             >
-              <DatePicker placeholder='Select start date' style={{ width: '100%' }} />
+              <DatePicker placeholder='Select start date' style={{ width: '100%' }} disabled={isGuest} />
             </Form.Item>
             <Form.Item
               name='toDate'
               label='To Date'
             >
-              <DatePicker placeholder='Select end date' style={{ width: '100%' }} disabled={form.getFieldValue('current')} />
+              <DatePicker placeholder='Select end date' style={{ width: '100%' }} disabled={form.getFieldValue('current') || isGuest} />
             </Form.Item>
             <Form.Item
               name='current'
               valuePropName='checked'
               onChange={handleCurrentChange}
             >
-              <Checkbox>Currently enrolled</Checkbox>
+              <Checkbox disabled={isGuest}>Currently enrolled</Checkbox>
             </Form.Item>
             <Form.Item
               name='description'
               label='Description'
               rules={[{ required: true, message: 'Please enter a description' }]}
             >
-              <Input.TextArea placeholder='Enter description' />
+              <Input.TextArea placeholder='Enter description' disabled={isGuest} />
             </Form.Item>
             <Form.Item
               name='grade'
               label='Grade'
             >
-              <Input placeholder='Enter grade (optional)' />
+              <Input placeholder='Enter grade (optional)' disabled={isGuest} />
             </Form.Item>
             <Form.Item
               name='location'
               label='Location'
               rules={[{ required: true, message: 'Please enter the location' }]}
             >
-              <Input placeholder='Enter location' />
+              <Input placeholder='Enter location' disabled={isGuest} />
             </Form.Item>
             <div className='d-flex justify-content-end'>
-              <Button className='btn btn-primary' htmlType='submit' loading={loading}>
+              <Button className='btn btn-primary' htmlType='submit' loading={loading} disabled={isGuest}>
                 {isEditing ? 'Update' : 'Add'}
               </Button>
             </div>

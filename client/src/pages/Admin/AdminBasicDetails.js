@@ -9,7 +9,7 @@ import moment from 'moment';
 
 function AdminBasicDetails() {
   const dispatch = useDispatch();
-  const { portfolioData } = useSelector((state) => state.root);
+  const { portfolioData, isGuest } = useSelector((state) => state.root);
   const basicData = portfolioData?.basicData || {};
 
   const [fileList, setFileList] = useState([]);
@@ -30,9 +30,10 @@ function AdminBasicDetails() {
   }, [basicData.profileImg]);
 
   const onFinish = async (values) => {
+    if (isGuest) return; 
+
     try {
       dispatch(ShowLoading());
-
       const formData = new FormData();
       formData.append('firstName', values.firstName);
       formData.append('lastName', values.lastName);
@@ -88,9 +89,7 @@ function AdminBasicDetails() {
           dob: basicData.dob ? moment(basicData.dob) : null,
         }}
       >
-        <Form.Item
-          label='Profile Picture'
-        >
+        <Form.Item label='Profile Picture'>
           <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
             <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
               {fileList.length > 0 && (
@@ -108,9 +107,9 @@ function AdminBasicDetails() {
                   onChange={handleUploadChange}
                   maxCount={1}
                   showUploadList={false}
-                  disabled={isUploadDisabled}
+                  disabled={isUploadDisabled || isGuest} 
                 >
-                  <Button icon={<UploadOutlined />} disabled={isUploadDisabled}>
+                  <Button icon={<UploadOutlined />} disabled={isUploadDisabled || isGuest}>
                     Click to Upload
                   </Button>
                 </Upload>
@@ -120,6 +119,7 @@ function AdminBasicDetails() {
                     type="danger"
                     onClick={handleRemoveImage}
                     style={{ marginTop: '10px' }}
+                    disabled={isGuest} 
                   >
                     Remove Image
                   </Button>
@@ -134,7 +134,7 @@ function AdminBasicDetails() {
           label='First Name'
           rules={[{ required: true, message: 'First name is required' }]}
         >
-          <Input placeholder='First Name' />
+          <Input placeholder='First Name' disabled={isGuest} /> 
         </Form.Item>
 
         <Form.Item
@@ -142,7 +142,7 @@ function AdminBasicDetails() {
           label='Last Name'
           rules={[{ required: true, message: 'Last name is required' }]}
         >
-          <Input placeholder='Last Name' />
+          <Input placeholder='Last Name' disabled={isGuest} /> 
         </Form.Item>
 
         <Form.Item
@@ -150,7 +150,7 @@ function AdminBasicDetails() {
           label='Date of Birth'
           rules={[{ required: true, message: 'Date of birth is required' }]}
         >
-          <DatePicker style={{ width: '100%' }} />
+          <DatePicker style={{ width: '100%' }} disabled={isGuest} /> 
         </Form.Item>
 
         <Form.Item
@@ -158,11 +158,11 @@ function AdminBasicDetails() {
           label='Location'
           rules={[{ required: true, message: 'Location is required' }]}
         >
-          <Input placeholder='Location' />
+          <Input placeholder='Location' disabled={isGuest} /> 
         </Form.Item>
 
         <div className='d-flex justify-content-end'>
-          <button className='px-5 py-2 btn btn-success' type='submit'>
+          <button className='px-5 py-2 btn btn-success' type='submit' disabled={isGuest}>
             Update
           </button>
         </div>

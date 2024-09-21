@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AdminSkills() {
   const dispatch = useDispatch();
-  const { portfolioData } = useSelector((state) => state.root);
+  const { portfolioData, isGuest } = useSelector((state) => state.root);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentSkill, setCurrentSkill] = useState(null);
@@ -31,6 +31,11 @@ function AdminSkills() {
   };
 
   const onFinish = async (values) => {
+    if (isGuest) {
+      message.error('Guest users cannot modify skills.');
+      return;
+    }
+
     try {
       dispatch(ShowLoading());
       let response;
@@ -58,6 +63,11 @@ function AdminSkills() {
   };
 
   const deleteSkill = (skillId) => {
+    if (isGuest) {
+      message.error('Guest users cannot delete skills.');
+      return; 
+    }
+
     Modal.confirm({
       title: 'Are you sure you want to delete this skill?',
       onOk: async () => {
@@ -82,7 +92,7 @@ function AdminSkills() {
   return (
     <div>
       <div className='d-flex justify-content-end mb-3'>
-        <Button className='btn btn-primary' onClick={() => showModal()}>
+        <Button className='btn btn-primary' onClick={() => showModal()} disabled={isGuest}>
           Add Skill
         </Button>
       </div>
@@ -104,12 +114,14 @@ function AdminSkills() {
                     <Button
                       className='btn btn-primary'
                       onClick={() => showModal(skill)}
+                      disabled={isGuest}
                     >
                       Update
                     </Button>
                     <Button
                       className='btn btn-danger'
                       onClick={() => deleteSkill(skill._id)}
+                      disabled={isGuest}
                     >
                       Delete
                     </Button>
@@ -137,24 +149,24 @@ function AdminSkills() {
             label='Skill Name'
             rules={[{ required: true, message: 'Please enter the skill name' }]}
           >
-            <Input placeholder='Enter skill name' />
+            <Input placeholder='Enter skill name' disabled={isGuest} />
           </Form.Item>
           <Form.Item
             name='image'
             label='Skill Image URL'
             rules={[{ required: true, message: 'Please enter the skill image URL' }]}
           >
-            <Input placeholder='Enter skill image URL' />
+            <Input placeholder='Enter skill image URL' disabled={isGuest} />
           </Form.Item>
           <Form.Item
             name='level'
             label='Skill Level'
             rules={[{ required: true, message: 'Please set the skill level' }]}
           >
-            <Slider min={0} max={100} />
+            <Slider min={0} max={100} disabled={isGuest} />
           </Form.Item>
           <div className='d-flex justify-content-end'>
-            <Button className='btn btn-primary' htmlType='submit'>
+            <Button className='btn btn-primary' htmlType='submit' disabled={isGuest}>
               {isEditing ? 'Update' : 'Add'}
             </Button>
           </div>

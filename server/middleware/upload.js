@@ -1,28 +1,29 @@
-// middleware/upload.js
+const AWS = require('aws-sdk');
 const multer = require('multer');
+const multerS3 = require('multer-s3');
 const path = require('path');
-const fs = require('fs');
 
-// Ensure the uploads directory exists
-const uploadDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    // Use the original name or generate a unique name
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  },
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,       
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, 
+  region: process.env.AWS_REGION,                  
 });
 
+// Create an S3 instance
+const s3 = new AWS.S3();
+
+// Configure multer-s3 storage
 const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.AWS_S3_BUCKET_NAME,       
+    acl: 'public-read',                            
+    key: function (req, file, cb) {
+      const fileName = `${Date.now()}_${path.basename(file.originalname)}`;
+      cb(null, `profile-pictures/${fileName}`);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 },            
   fileFilter: function (req, file, cb) {
     const filetypes = /jpeg|jpg|png|gif/;
     const mimetype = filetypes.test(file.mimetype);
@@ -30,7 +31,7 @@ const upload = multer({
     if (mimetype && extname) {
       return cb(null, true);
     }
-    cb(new Error('Only images are allowed'));
+    cb(new Error('Only image files are allowed!'));
   },
 });
 

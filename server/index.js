@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.log(err));
 
   app.get('/', (req, res) => {
-    res.send('Welcome to the backend!');
+    res.send('Welcome to Backend! , Darshan Nayak');
     // console.log('BACKEND SERVER RUNNING');
   });
 // Define Routes

@@ -185,52 +185,50 @@ router.post('/delete-education', async (req, res) => {
     }
 });
 
+// Serve static files from the 'uploads' directory (optional if not using local storage)
+router.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 // UPDATE PROFILE API
 router.post('/update-profile', upload.single('profileImg'), async (req, res) => {
-    try {
-      const { firstName, lastName, dob, location, _id } = req.body;
-      let profileImg;
-  
-      // If a new image is uploaded, set the profileImg path
-      if (req.file) {
-        profileImg = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-      }
-  
-      // Find the profile by _id
-      const profile = await Profile.findById(_id);
-      if (!profile) {
-        return res.status(404).send({
-          success: false,
-          message: 'Profile not found',
-        });
-      }
-  
-      // Update fields
-      profile.firstName = firstName;
-      profile.lastName = lastName;
-      profile.dob = dob;
-      profile.location = location;
-      if (profileImg) {
-        profile.profileImg = profileImg;
-      }
-  
-      await profile.save();
-  
-      res.status(200).send({
-        success: true,
-        message: 'Profile updated successfully',
-        data: profile,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send({
+  try {
+    const { firstName, lastName, dob, location, _id } = req.body;
+    let profileImgUrl = req.body.profileImg; // Default to existing image
+
+    // If a new image is uploaded, use its S3 URL
+    if (req.file && req.file.location) {
+      profileImgUrl = req.file.location;
+    }
+
+    // Find the profile by _id
+    const profile = await Profile.findById(_id);
+    if (!profile) {
+      return res.status(404).send({
         success: false,
-        message: error.message,
+        message: 'Profile not found',
       });
     }
-  });
-  
-  // Serve static files from the uploads directory
-  router.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+    // Update fields
+    profile.firstName = firstName;
+    profile.lastName = lastName;
+    profile.dob = dob;
+    profile.location = location;
+    profile.profileImg = profileImgUrl;
+
+    await profile.save();
+
+    res.status(200).send({
+      success: true,
+      message: 'Profile updated successfully',
+      data: profile,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      success: false,
+      message: error.message,
+    });
+  }
+});
   
 module.exports = router;

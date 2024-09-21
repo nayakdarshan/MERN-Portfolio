@@ -27,31 +27,68 @@ router.get('/get-portfolio-data', async(req,res)=>{
 })
 
 // admin login
-router.post('/admin-login', async(req,res)=>{
-    try{
+router.post('/admin-login', async (req, res) => {
+    try {
         const user = await Users.findOne({
-            username:req.body.username,
-            password:req.body.password
+            username: req.body.username,
+            password: req.body.password
         });
-        if(user){
-            res.status(200).send({
-                success:true,
-                data:user,
-                message:"Login Succesfull"
+
+        if (user) {
+            return res.status(200).send({
+                success: true,
+                data: user,
+                message: "Login Successful"
             });
-        }else{
-            res.status(400).send({
-                success:false,
-                data:user,
-                message:"Login Failed - Invalid username and password"
+        } else {
+            return res.status(400).send({
+                success: false,
+                message: "Login Failed - Invalid username or password"
             });
         }
-        
-    }catch(error){
-        console.log(error)
-        res.status(500).send(error);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({
+            success: false,
+            message: "Internal Server Error"
+        });
     }
-})
+});
+
+// Guest login
+router.post('/guest-login', async (req, res) => {
+    try {
+        // Assuming guest credentials are hardcoded
+        const guestUser = {
+            username: 'guest',
+            password: 'guest'
+        };
+
+        const user = await Users.findOne({
+            username: guestUser.username,
+            password: guestUser.password
+        });
+
+        if (user) {
+            return res.status(200).send({
+                success: true,
+                data: user,
+                message: "Guest Login Successful"
+            });
+        } else {
+            return res.status(400).send({
+                success: false,
+                message: "Guest Login Failed - Invalid guest credentials"
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({
+            success: false,
+            message: "Internal Server Error"
+        });
+    }
+});
 
 //INTRO update API
 router.post('/update-intro', async(req,res)=>{

@@ -30,43 +30,32 @@ router.get('/get-portfolio-data', async(req,res)=>{
     }
 })
 
+//admin login
 router.post('/admin-login', async (req, res) => {
     try {
-        console.log('Login attempt:', req.body);
-
         const user = await Users.findOne({ username: req.body.username });
-        if (!user) {
-            console.log('User not found:', req.body.username);
-            return res.status(400).send({
-                success: false,
-                message: "Login Failed - Invalid username or password"
-            });
-        }
 
-        console.log('User found:', user.username);
-        const passwordMatch = await bcrypt.compare(req.body.password, user.password);
-        console.log('Password match:', passwordMatch);
-
-        if (passwordMatch) {
+        if (user && await bcrypt.compare(req.body.password, user.password)) {
+            // Set token expiration to 5 minutes
             const token = jwt.sign(
-                { id: user._id, username: user.username },
-                SECRET_KEY,
-                { expiresIn: '1h' }
+                { id: user._id, username: user.username }, 
+                SECRET_KEY, 
+                { expiresIn: '5m' } // Expires in 5 minutes
             );
+
             return res.status(200).send({
                 success: true,
                 message: "Login Successful",
                 token: token
             });
         } else {
-            console.log('Password mismatch for user:', user.username);
             return res.status(400).send({
                 success: false,
                 message: "Login Failed - Invalid username or password"
             });
         }
     } catch (error) {
-        console.error('Error during admin login:', error);
+        console.error(error);
         return res.status(500).send({
             success: false,
             message: "Internal Server Error"

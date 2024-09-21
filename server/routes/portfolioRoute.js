@@ -4,6 +4,8 @@ const {Intro,About, Skill,Education, Profile} = require('../models/portfolioMode
 const {Users} = require('../models/userModel');
 const upload = require('../middleware/upload');
 const path = require('path');
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = process.env.JWT_SECRET;
 //get All Portfolio data
 router.get('/get-portfolio-data', async(req,res)=>{
     try{
@@ -31,14 +33,15 @@ router.post('/admin-login', async (req, res) => {
     try {
         const user = await Users.findOne({
             username: req.body.username,
-            password: req.body.password
+            password: req.body.password 
         });
 
         if (user) {
+            const token = jwt.sign({ id: user._id, username: user.username }, SECRET_KEY, { expiresIn: '1h' });
             return res.status(200).send({
                 success: true,
-                data: user,
-                message: "Login Successful"
+                message: "Login Successful",
+                token: token
             });
         } else {
             return res.status(400).send({

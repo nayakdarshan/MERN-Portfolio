@@ -30,32 +30,50 @@ router.get('/get-portfolio-data', async(req,res)=>{
     }
 })
 
-// admin login
 router.post('/admin-login', async (req, res) => {
     try {
-        const user = await Users.findOne({ username: req.body.username });
+        console.log('Login attempt:', req.body);
 
-        if (user && await bcrypt.compare(req.body.password, user.password)) {
-            const token = jwt.sign({ id: user._id, username: user.username }, SECRET_KEY, { expiresIn: '1h' });
+        const user = await Users.findOne({ username: req.body.username });
+        if (!user) {
+            console.log('User not found:', req.body.username);
+            return res.status(400).send({
+                success: false,
+                message: "Login Failed - Invalid username or password"
+            });
+        }
+
+        console.log('User found:', user.username);
+        const passwordMatch = await bcrypt.compare(req.body.password, user.password);
+        console.log('Password match:', passwordMatch);
+
+        if (passwordMatch) {
+            const token = jwt.sign(
+                { id: user._id, username: user.username },
+                SECRET_KEY,
+                { expiresIn: '1h' }
+            );
             return res.status(200).send({
                 success: true,
                 message: "Login Successful",
                 token: token
             });
         } else {
+            console.log('Password mismatch for user:', user.username);
             return res.status(400).send({
                 success: false,
                 message: "Login Failed - Invalid username or password"
             });
         }
     } catch (error) {
-        console.error(error);
+        console.error('Error during admin login:', error);
         return res.status(500).send({
             success: false,
             message: "Internal Server Error"
         });
     }
 });
+
 
 
 // Guest login
